@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=pgModeler
+Comment=pgModeler
+Exec=pgmodeler
+Icon=pgmodeler_logo
+Categories=Development;

@@ -1,0 +1,27 @@
+language: cpp
+compiler: gcc
+sudo: require
+dist: bionic
+
+before_install:
+  - sudo apt-get update -qq
+
+install:
+  - sudo apt-get -y install build-essential git qt5-default qt5-qmake libpq5 libxml2 pkg-config xml2 libxml2-dev libpq-dev libqt5svg5*
+
+script:
+  - qmake CONFIG+=release PREFIX=/usr
+  - make -j$(nproc)
+  - make INSTALL_ROOT=appdir -j$(nproc) install ; find appdir/
+  - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+  - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage -unsupported-allow-new-glibc
+
+branches:
+  - master
+
+deploy:
+  provider: releases
+  api_key: "$GH_TOKEN"
+  file: pgModeler*.AppImage*
+  skip_cleanup: true
